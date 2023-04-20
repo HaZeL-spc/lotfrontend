@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import MainPage from "./components/MainPage";
+import KokpitSamolotu from "./images/kokpitSamolotu.jpg";
+import FlightForm from "./components/FlightForm";
 
 function App() {
+  const [whichWebsite, setWhichWebsite] = useState("main");
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container">
+        <img src={KokpitSamolotu} className="background-image" />
+        <div className="overlay-gradient"></div>
+      </div>
+      {whichWebsite === "main" ? (
+        <MainPage setWhichWebsite={setWhichWebsite} />
+      ) : (
+        <FlightForm />
+      )}
     </div>
   );
 }

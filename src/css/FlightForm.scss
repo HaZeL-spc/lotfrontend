@@ -1,0 +1,223 @@
+@import "./variables";
+
+.button-lot {
+    all: unset;
+    background-color: white;
+    width: 200px;
+    height: 60px;
+    color:black;
+    font-size: 30px;
+    font-weight: 500;
+    text-align: center;
+    border: 3px solid $darkBlue;
+    // margin: auto;
+    margin-left: auto; margin-right: auto;
+
+    cursor: pointer;
+    transition: all $timeTransition;
+
+    &:hover {
+        background-color: $lightBlue;
+    }
+    border-radius: 5px;
+}
+
+.flight-form {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+
+    z-index: 100;
+    
+    animation-name: mymove;
+    animation-duration: 1s;
+    margin: auto;
+
+    display: flex;
+    flex-direction: row;
+
+    .form-container {
+        width: 45%;
+        background-color: #FFFDFD;
+    }
+
+    .flights-container {
+        width:55%;
+        background-color: transparent;
+    }
+
+    .main-form {
+        height: 80%;
+        width: 55%;
+
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        margin: auto;
+
+        .MuiAutocomplete-root {
+            all: unset;
+            width: 80%;
+
+            input {
+                // margin: 0px;
+                width: 100%;
+            }
+        }
+
+        .MuiInputBase-root {
+            all: unset;
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+        }
+
+        input {
+            // all: unset;
+            margin-top: 20px;
+           
+            width: 70%;
+            border-bottom: 3px solid $darkBlue;
+            
+            font-size:25px;
+        }
+
+        .react-datepicker-wrapper {
+            margin-top: 20px;
+        }
+
+        .form-button {
+            width: 70%;
+            background-color: $darkBlue;
+            color:white;
+            margin: 0;
+            margin-right: auto;
+            margin-top: 50px;
+        }
+    }
+
+    .flights-container {
+        .headers {
+            width: 80%;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            margin-left:auto;
+            margin-right: auto;
+            color: white;
+            font-weight: 300;
+            padding-left: 20px;
+            padding-right: 20px;
+
+            h1 {
+                flex: 1;
+                text-align: center;
+            }
+        }
+        .flight-info {
+            width: 80%;
+            background-color: white;
+            margin:10px auto 10px auto;
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            color: white;
+            font-weight: 300;
+            color:black;
+
+            h1 {
+                flex: 1;
+                text-align: center;
+            }
+        }
+    }
+}
+
+@keyframes mymove {
+    from {transform: translateX(-100%);}
+    to {transform: translateX(0%);}
+  }
+
+
+@media (max-width: 1024px) {
+    .flight-form {
+        flex-direction: column-reverse;
+
+        .form-container {
+            width: 100%;
+            height: 50%;
+            background-color: #FFFDFD;
+
+            .main-form {
+                height: 80%;
+                width: 50%;
+        
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                margin: auto;
+                margin-top: 30px;
+        
+                .MuiAutocomplete-root {
+                    all: unset;
+                    width: 100%;
+        
+                    input {
+                        // margin: 0px;
+                        width: 100%;
+                    }
+                }
+        
+                .MuiInputBase-root {
+                    all: unset;
+                    margin: 0px;
+                    padding: 0px;
+                    width: 100%;
+                }
+        
+                input {
+                   
+                    width: 100%;
+                }
+
+                .form-button {
+                    margin-left:auto;
+                    margin-right: auto;
+                }
+            }
+        }
+    
+        .flights-container {
+            width:100%;
+            height: 55%;
+            background-color: transparent;
+        }
+    }
+}
+
+@media (max-width: 642px) {
+    .flight-form {
+        .flights-container {
+            .flight-info {
+                background-color: white;
+                height: 28px;
+                font-size: 13px;
+            }
+        }
+    }
+}
+
+@media (max-height: 700px ) {
+    .flight-form {
+        .flights-container {
+            .flight-info {
+                background-color: white;
+                height: 28px;
+                font-size: 13px;
+            }
+        }
+    }
+}
