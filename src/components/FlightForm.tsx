@@ -31,12 +31,14 @@ const FlightForm = () => {
     airport: "",
   });
 
-  const [dateFlight, setDateFlight] = useState<Date>(new Date());
+  const [dateFlight, setDateFlight] = useState<Date>(
+    new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+  );
   const [flightData, setFlightData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    console.log("loading useEffect");
+    // console.log("loading useEffect");
     let load = document.getElementById("load-form") as HTMLElement;
 
     if (loading == true) {
@@ -47,13 +49,14 @@ const FlightForm = () => {
   }, [loading]);
 
   const validateData = (): boolean => {
-    console.log(origin, destination);
+    // console.log(origin, destination);
 
+    if (origin.iata == destination.iata) return false;
     if (origin.keyword === "") return false;
     if (destination.keyword === "") return false;
-    const nextDay = new Date(dateFlight.getTime() + 24 * 60 * 60 * 1000);
+    // const nextDay = new Date(dateFlight.getTime() + 24 * 60 * 60 * 1000);
 
-    let diff = nextDay.getTime() - new Date().getTime();
+    let diff = dateFlight.getTime() - new Date().getTime();
 
     if (diff < 0) return false;
 
@@ -90,7 +93,7 @@ const FlightForm = () => {
 
     if (!validateData()) {
       // not correct data
-      setDateFlight(new Date());
+      setDateFlight(new Date(new Date().getTime() + 24 * 60 * 60 * 1000));
 
       setLoading(false);
       return;
@@ -110,7 +113,7 @@ const FlightForm = () => {
       el.innerHTML = "There are no flights";
     }
 
-    console.log(resultData);
+    // console.log(resultData);
     let uniqueData = [];
     let starts: string[];
     starts = [];
@@ -140,7 +143,7 @@ const FlightForm = () => {
     for (let i = 0; i < uniqueData.length; i++) {
       uniqueDataNever.push(uniqueData[i] as never);
     }
-    console.log(uniqueDataNever);
+    // console.log(uniqueDataNever);
 
     uniqueDataNever.sort((a: any, b: any) => a.start - b.start);
     setFlightData(uniqueDataNever);
@@ -175,7 +178,7 @@ const FlightForm = () => {
   };
 
   const renderFlights = (flights: any) => {
-    console.log(flights[0].itineraries[0].duration);
+    // console.log(flights[0].itineraries[0].duration);
     return flights.map((el: any) => {
       const segments = el.itineraries[0].segments;
       const departure = new Date(segments[0].departure.at);
