@@ -30,7 +30,7 @@
     width: 100%;
 
     z-index: 100;
-    
+
     animation-name: mymove;
     animation-duration: 1s;
     margin: auto;
@@ -46,16 +46,21 @@
     .flights-container {
         width:55%;
         background-color: transparent;
+        overflow-x:hidden;
     }
 
     .main-form {
-        height: 80%;
+        height: 100%;
         width: 55%;
 
         display: flex;
         justify-content: center;
         flex-direction: column;
         margin: auto;
+
+        h1 {
+            text-align: center;
+        }
 
         .MuiAutocomplete-root {
             all: unset;
@@ -65,6 +70,47 @@
                 // margin: 0px;
                 width: 100%;
             }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+         @-webkit-keyframes rotate {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        .load {
+            opacity: 0;
+            width: 50px;
+            height: 50px;
+            margin: 50px auto 0;
+            border:solid 5px #8822aa;
+            border-radius: 50%;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+             -webkit-transition: all 0.5s ease-in;
+            -webkit-animation-name:             rotate;
+            -webkit-animation-duration:         1.0s;
+            -webkit-animation-iteration-count:  infinite;
+            -webkit-animation-timing-function: linear;
+
+                 transition: all 0.5s ease-in;
+            animation-name:             rotate;
+            animation-duration:         1.0s;
+            animation-iteration-count:  infinite;
+            animation-timing-function: linear;
         }
 
         .MuiInputBase-root {
@@ -77,10 +123,10 @@
         input {
             // all: unset;
             margin-top: 20px;
-           
+
             width: 70%;
             border-bottom: 3px solid $darkBlue;
-            
+
             font-size:25px;
         }
 
@@ -152,34 +198,38 @@
             background-color: #FFFDFD;
 
             .main-form {
-                height: 80%;
+                height: 90%;
                 width: 50%;
-        
+
                 display: flex;
                 justify-content: center;
                 flex-direction: column;
                 margin: auto;
                 margin-top: 30px;
-        
+
+                .load { 
+                    display: none;
+                }
+
                 .MuiAutocomplete-root {
                     all: unset;
                     width: 100%;
-        
+
                     input {
                         // margin: 0px;
                         width: 100%;
                     }
                 }
-        
+
                 .MuiInputBase-root {
                     all: unset;
                     margin: 0px;
                     padding: 0px;
                     width: 100%;
                 }
-        
+
                 input {
-                   
+
                     width: 100%;
                 }
 
@@ -189,7 +239,7 @@
                 }
             }
         }
-    
+
         .flights-container {
             width:100%;
             height: 55%;

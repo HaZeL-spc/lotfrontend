@@ -24,10 +24,7 @@ const getAmadeusData = params => {
   
     // GET request with all params we need
     const out = axios.get(
-      `/api/airports/?keyword=${searchQuery}&page=${page}&subType=${subTypeCheck}`,
-      {
-        cancelToken: source.token
-      }
+      `/api/airports/?keyword=${searchQuery}&page=${page}&subType=${subTypeCheck}`
     )
 
   
@@ -62,9 +59,10 @@ const SearchAutocomplete = (props) => {
       if (!res.data.code) {
         setOptions(res.data.data);
       }
-      //console.log(res.data.data)
+      // console.log("correct")
       setLoading(false)
     }).catch(err => {
+      console.log(err)
       axios.isCancel(err);
       setOptions([]);
       setLoading(false)
@@ -103,14 +101,14 @@ const SearchAutocomplete = (props) => {
             return;
           }
           setSearch("")
-          props.setSearch((p) => ({ ...p, keyword: "a", page: 0, iata: "NYC" }))
+          props.setSearch((p) => ({ ...p, keyword: "", page: 0, iata: "NYC" }))
 
         }}
         getOptionLabel={option => {
           return option.name;
         }}
         options={names}
-        loading={loading}
+        // loading={loading}
         renderInput={params => {
           return (
             <TextField
@@ -128,14 +126,14 @@ const SearchAutocomplete = (props) => {
               }}
               InputProps={{
                 ...params.InputProps,
-                endAdornment: (
-                  <React.Fragment>
-                    {loading ? (
-                      <CircularProgress color="inherit" size={20} />
-                    ) : null}
-                    {/* //{params.InputProps.endAdornment} */}
-                  </React.Fragment>
-                )
+                // endAdornment: (
+                //   // <React.Fragment>
+                //   //   {loading ? (
+                //   //     <CircularProgress color="inherit" size={20} />
+                //   //   ) : null}
+                //   //   {/* //{params.InputProps.endAdornment} */}
+                //   // </React.Fragment>
+                // )
               }}
             />
           );

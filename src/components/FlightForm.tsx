@@ -31,15 +31,30 @@ const FlightForm = () => {
     airport: "",
   });
 
-  const [date, setDate] = useState<Date>(new Date());
+  const [dateFlight, setDateFlight] = useState<Date>(new Date());
   const [flightData, setFlightData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const validateData = (): boolean => {
-    if (origin.iata === "") return false;
-    if (destination.iata === "") return false;
+  useEffect(() => {
+    console.log("loading useEffect");
+    let load = document.getElementById("load-form") as HTMLElement;
 
-    let diff = date.getTime() - new Date().getTime();
+    if (loading == true) {
+      load.style.opacity = "1";
+    } else {
+      load.style.opacity = "0";
+    }
+  }, [loading]);
+
+  const validateData = (): boolean => {
+    console.log(origin, destination);
+
+    if (origin.keyword === "") return false;
+    if (destination.keyword === "") return false;
+    const nextDay = new Date(dateFlight.getTime() + 24 * 60 * 60 * 1000);
+
+    let diff = nextDay.getTime() - new Date().getTime();
+
     if (diff < 0) return false;
 
     return true;
@@ -70,12 +85,12 @@ const FlightForm = () => {
   const getFlightsData = async () => {
     const originProp = origin.iata;
     const destinationProp = destination.iata;
-    let dateParam = getYearMonthDay(date);
+    let dateParam = getYearMonthDay(dateFlight);
     let dateStr = `${dateParam[0]}-${dateParam[1]}-${dateParam[2]}`;
 
     if (!validateData()) {
       // not correct data
-      setDate(new Date());
+      setDateFlight(new Date());
 
       setLoading(false);
       return;
@@ -89,32 +104,34 @@ const FlightForm = () => {
       },
     });
     const resultData = (await result).data;
+
+    if (resultData.data.length == 0) {
+      let el = document.getElementById("error-communicate") as HTMLElement;
+      el.innerHTML = "There are no flights";
+    }
+
     console.log(resultData);
     let uniqueData = [];
-    let costs: number[];
-    costs = [];
-
-    //console.log(resultData.data);
+    let starts: string[];
+    starts = [];
 
     for (let i = 0; i < resultData.data.length; i++) {
       let item = resultData.data[i];
-      console.log(item.price.total);
-      console.log("----------------");
+
       let czyOk = true;
-      for (let j = 0; j < costs.length; j++) {
-        console.log(costs[j]);
-        if (costs[j] === item.price.total) {
+      for (let j = 0; j < starts.length; j++) {
+        //console.log(item.itineraries[0].segments[0].departure.at);
+        if (starts[j] === item.itineraries[0].segments[0].departure.at) {
           czyOk = false;
           break;
         }
       }
 
       if (czyOk) {
-        costs.push(item.price.total);
+        starts.push(item.itineraries[0].segments[0].departure.at);
+        item.start = new Date(item.itineraries[0].segments[0].departure.at);
         uniqueData.push(item);
       }
-
-      if (uniqueData.length == 6) break;
     }
 
     let uniqueDataNever: never[];
@@ -123,7 +140,9 @@ const FlightForm = () => {
     for (let i = 0; i < uniqueData.length; i++) {
       uniqueDataNever.push(uniqueData[i] as never);
     }
+    console.log(uniqueDataNever);
 
+    uniqueDataNever.sort((a: any, b: any) => a.start - b.start);
     setFlightData(uniqueDataNever);
     setLoading(false);
   };
@@ -132,6 +151,8 @@ const FlightForm = () => {
     e.preventDefault();
     setFlightData([]);
     setLoading(true);
+    let el = document.getElementById("error-communicate") as HTMLElement;
+    el.innerHTML = "";
     getFlightsData();
   };
 
@@ -154,38 +175,23 @@ const FlightForm = () => {
   };
 
   const renderFlights = (flights: any) => {
-    console.log(flights[0].itineraries[0].segments.length);
+    console.log(flights[0].itineraries[0].duration);
     return flights.map((el: any) => {
-      const segments = flights[0].itineraries[0].segments;
+      const segments = el.itineraries[0].segments;
       const departure = new Date(segments[0].departure.at);
 
       let hourArrival = departure.getHours();
       let minuteArrival = departure.getMinutes();
 
       let result1 = getHourMinutes(hourArrival, minuteArrival);
-
-      const lastIndex = segments.length - 1;
-      const arrival1 = new Date(segments[lastIndex].arrival.at);
-      const diffInMs = arrival1.getTime() - departure.getTime();
-
-      // Get the time difference in minutes
-      const diffInMinutes =
-        (Math.floor(Math.floor(diffInMs / (1000 * 60)) * 100) / 100) % 60;
-
-      // Get the time difference in hours
-      const diffInHours =
-        Math.floor(Math.floor(diffInMs / (1000 * 60 * 60)) * 100) / 100;
-
-      let result2 = getHourMinutes(diffInHours, diffInMinutes);
+      let result2 = el.itineraries[0].duration.substring(2);
 
       return (
         <div className="flight-info">
           <h1>
             {result1[0]}:{result1[1]}
           </h1>
-          <h1>
-            {result2[0]}:{result2[1]}
-          </h1>
+          <h1>{result2}</h1>
           <h1>{segments.length}</h1>
           <h1>{el.price.total}$</h1>
         </div>
@@ -208,9 +214,13 @@ const FlightForm = () => {
             placeholder="arrival"
           />
           {/* <input type="text" /> */}
-          <DatePicker selected={date} onChange={(date: any) => setDate(date)} />
+          <DatePicker
+            selected={dateFlight}
+            onChange={(date: any) => setDateFlight(date)}
+          />
           <button className="button-lot form-button">Submit</button>
-          {loading && <h1>waiting...</h1>}
+          <div className="load" id="load-form"></div>
+          <h1 id="error-communicate"></h1>
         </form>
       </div>
       <div className="flights-container">
